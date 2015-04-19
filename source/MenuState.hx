@@ -33,21 +33,22 @@ class MenuState extends FlxState
 		flixel.FlxG.camera.bounds = new flixel.util.FlxRect(0,0,tileMap.width,tileMap.height);
 		
 		soldiers = new flixel.group.FlxTypedGroup<Soldier>();
-		for (i in 0 ... 1) {
-		var soldier :Soldier = new Soldier(Math.random()*tileMap.width,Math.random()*tileMap.height);	
-		//soldier.type = Math.floor(Math.random()*2);
+	
+		for (i in 0 ... 3) {
+		var soldier :Soldier = new Soldier(Math.random()*tileMap.width,Math.random()*tileMap.height,Math.floor(Math.random()*2));	
+		//var soldier :Soldier = new Soldier(400+Math.random()*100,400+Math.random()*100);
+		
+		soldier.color = 0xFFFF0000;
 		soldiers.add(soldier);
 		
 		}
 		
-		for (i in 0 ... 1) {
+		for (i in 0 ... 0) {
 		var soldier :Soldier = new Soldier(Math.random()*tileMap.width,Math.random()*tileMap.height);	
 		player.followers.add(soldier);
-		soldier.type = i;
+		soldier.color = 0xFF00FF00;
 		soldier.isEnemy = false;
 		}
-
-		FlxG.state.add(player);
 	}
 	
 	/**
@@ -92,9 +93,12 @@ class MenuState extends FlxState
 				}	
 			}
 		}
-		if(minIndex == -1)
+		if(minIndex == -1 )
 		{
+			if( minDist < range)
 			return player;
+			else
+			return null;
 		}
 		else
 		{

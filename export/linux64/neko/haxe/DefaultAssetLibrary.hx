@@ -50,6 +50,8 @@ class DefaultAssetLibrary extends AssetLibrary {
 		type.set ("assets/images/images-go-here.txt", AssetType.TEXT);
 		path.set ("assets/images/player.png", "assets/images/player.png");
 		type.set ("assets/images/player.png", AssetType.IMAGE);
+		path.set ("assets/images/Tempting Secrets.mp3", "assets/images/Tempting Secrets.mp3");
+		type.set ("assets/images/Tempting Secrets.mp3", AssetType.MUSIC);
 		path.set ("assets/images/tile.png", "assets/images/tile.png");
 		type.set ("assets/images/tile.png", AssetType.IMAGE);
 		path.set ("assets/images/tile.xcf", "assets/images/tile.xcf");
@@ -60,6 +62,8 @@ class DefaultAssetLibrary extends AssetLibrary {
 		type.set ("assets/images/soldier.xcf", AssetType.BINARY);
 		path.set ("assets/images/tileset.png", "assets/images/tileset.png");
 		type.set ("assets/images/tileset.png", AssetType.IMAGE);
+		path.set ("assets/images/soldier2.png", "assets/images/soldier2.png");
+		type.set ("assets/images/soldier2.png", AssetType.IMAGE);
 		path.set ("assets/images/arrow.png", "assets/images/arrow.png");
 		type.set ("assets/images/arrow.png", AssetType.IMAGE);
 		path.set ("assets/data/data-goes-here.txt", "assets/data/data-goes-here.txt");
@@ -68,8 +72,18 @@ class DefaultAssetLibrary extends AssetLibrary {
 		type.set ("assets/data/testlevel.tmx", AssetType.TEXT);
 		path.set ("assets/data/testmap.csv", "assets/data/testmap.csv");
 		type.set ("assets/data/testmap.csv", AssetType.TEXT);
+		path.set ("assets/sounds/Powerup.wav", "assets/sounds/Powerup.wav");
+		type.set ("assets/sounds/Powerup.wav", AssetType.SOUND);
+		path.set ("assets/sounds/step.wav", "assets/sounds/step.wav");
+		type.set ("assets/sounds/step.wav", AssetType.SOUND);
+		path.set ("assets/sounds/Hit.wav", "assets/sounds/Hit.wav");
+		type.set ("assets/sounds/Hit.wav", AssetType.SOUND);
+		path.set ("assets/sounds/arrow.wav", "assets/sounds/arrow.wav");
+		type.set ("assets/sounds/arrow.wav", AssetType.SOUND);
 		path.set ("assets/sounds/sounds-go-here.txt", "assets/sounds/sounds-go-here.txt");
 		type.set ("assets/sounds/sounds-go-here.txt", AssetType.TEXT);
+		path.set ("assets/sounds/die.wav", "assets/sounds/die.wav");
+		type.set ("assets/sounds/die.wav", AssetType.SOUND);
 		path.set ("assets/music/music-goes-here.txt", "assets/music/music-goes-here.txt");
 		type.set ("assets/music/music-goes-here.txt", AssetType.TEXT);
 		path.set ("assets/sounds/beep.ogg", "assets/sounds/beep.ogg");
@@ -145,6 +159,9 @@ class DefaultAssetLibrary extends AssetLibrary {
 		id = "assets/images/player.png";
 		path.set (id, id);
 		type.set (id, AssetType.IMAGE);
+		id = "assets/images/Tempting Secrets.mp3";
+		path.set (id, id);
+		type.set (id, AssetType.MUSIC);
 		id = "assets/images/tile.png";
 		path.set (id, id);
 		type.set (id, AssetType.IMAGE);
@@ -160,6 +177,9 @@ class DefaultAssetLibrary extends AssetLibrary {
 		id = "assets/images/tileset.png";
 		path.set (id, id);
 		type.set (id, AssetType.IMAGE);
+		id = "assets/images/soldier2.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
 		id = "assets/images/arrow.png";
 		path.set (id, id);
 		type.set (id, AssetType.IMAGE);
@@ -172,9 +192,24 @@ class DefaultAssetLibrary extends AssetLibrary {
 		id = "assets/data/testmap.csv";
 		path.set (id, id);
 		type.set (id, AssetType.TEXT);
+		id = "assets/sounds/Powerup.wav";
+		path.set (id, id);
+		type.set (id, AssetType.SOUND);
+		id = "assets/sounds/step.wav";
+		path.set (id, id);
+		type.set (id, AssetType.SOUND);
+		id = "assets/sounds/Hit.wav";
+		path.set (id, id);
+		type.set (id, AssetType.SOUND);
+		id = "assets/sounds/arrow.wav";
+		path.set (id, id);
+		type.set (id, AssetType.SOUND);
 		id = "assets/sounds/sounds-go-here.txt";
 		path.set (id, id);
 		type.set (id, AssetType.TEXT);
+		id = "assets/sounds/die.wav";
+		path.set (id, id);
+		type.set (id, AssetType.SOUND);
 		id = "assets/music/music-goes-here.txt";
 		path.set (id, id);
 		type.set (id, AssetType.TEXT);
@@ -322,9 +357,23 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		
 		
+		
+		
+		
+		
+		
+		
+		
 		#if (windows || mac || linux)
 		
 		var useManifest = false;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
 		useManifest = true;
 		useManifest = true;
 		useManifest = true;
@@ -1032,7 +1081,21 @@ class DefaultAssetLibrary extends AssetLibrary {
 
 
 
+
+
+
+
+
+
+
 #elseif html5
+
+
+
+
+
+
+
 
 
 

@@ -14,7 +14,6 @@ class Soldier extends Person {
 	private var mode = 0;// 0 -> idle // 1-> run after
 	public var type = 0;//0-> melee // 1-> shooter
 	private var command = 0;//0-> melee // 1-> shooter
-	public var isEnemy:Bool = true;
 	private var emitter:FlxEmitter;
 	private var whitePixel:FlxParticle;
 	public var maxloyalty:Float = 10;
@@ -26,22 +25,34 @@ class Soldier extends Person {
 	private var arrowsRange:Int = 60;
 	private var arrowsSpeed:Int = 300;
 	private var bow:FlxWeapon;
-	public function new(X:Float=0, Y:Float=0) 
+	public function new(X:Float=0, Y:Float=0 , ?type:Int = 0) 
 	{
 		super(X, Y);
-		loadGraphic("assets/images/soldier.png", true, 32, 32);
+		loadGraphic("assets/images/soldier2.png", true, 32, 32);
 		setFacingFlip(FlxObject.LEFT, false, false);
 		setFacingFlip(FlxObject.RIGHT, true, false);
-		animation.add("run", [0,2,0,3], 15, true);
-		animation.add("idle", [0,1], 2, true);
-		animation.add("shoot", [4,5], 2, true);
-		animation.add("melee", [6,7], 2, true);
+		this.type = type;
+		if(type == 0)
+		{
+			animation.add("run", [0,2,0,3], 15, true);
+			animation.add("idle", [0,1], 2, true);
+			animation.add("shoot", [4,5], 2, true);
+			animation.add("melee", [6,7], 2, true);		
+		}
+		if(type == 1)
+		{
+			animation.add("run", [8,10,8,11], 15, true);
+			animation.add("idle", [8,9], 2, true);
+			animation.add("shoot", [12,13], 2, true);
+			animation.add("melee", [14,15], 2, true);
+		}
 		animation.callback = animCallback;
 		speed = 150;
+		loyalty = maxloyalty;
 		player = MenuState.player;
-		FlxG.state.add(this);
 		loyaltyBar = new flixel.ui.FlxBar(x + barOffset2.x, y+ barOffset2.y,FlxBar.FILL_LEFT_TO_RIGHT , 30, 3,this ,"loyalty",0,maxloyalty,false);	
-		loyaltyBar.createFilledBar(0xFFFFC368,0xFFFDC303);
+		loyaltyBar.createFilledBar(0xFF994C00,0xFFFDC303);
+
 		FlxG.state.add(loyaltyBar);
 		// Here we actually initialize out emitter
 		// The parameters are X, Y and Size (Maximum number of particles the emitter can store)
@@ -79,8 +90,27 @@ class Soldier extends Person {
 	{
 		if(isEnemy)
 		{
-			target = MenuState.getNearestFriendTo(new flixel.util.FlxPoint(x,y),0,100);
-			controlEnemyMovement();
+			var tempPerson:Person = MenuState.getNearestFriendTo(new flixel.util.FlxPoint(x,y),0,100);
+			if(tempPerson != null)
+			{
+				if(tempPerson != target)
+				{
+					shout("enemy found");
+					signal();
+				}
+				target = tempPerson;
+				controlEnemyMovement();
+				
+			}
+			else
+			{ 
+				if(target != null)
+				{
+					if(shout("!!!!"))
+					target= null;
+				}
+				animation.play("idle");
+			}
 		}
 		else
 		{
@@ -139,20 +169,21 @@ class Soldier extends Person {
 	}
 	public function animCallback(s:String, f:Int, i:Int):Void
 	{
-		if(target != null && target.alive)
+		if(target != null && target.alive && target.isEnemy != this.isEnemy)
 		{
 			if (s == "melee" && f == 1)
 			{
 				if(target!= null && target.alive)
 				{
 					target.hurt(5);
+					FlxG.sound.play("assets/sounds/Hit.wav");
 				}
-				
 			}
 			if (s == "shoot" && f == 1)
 			{
 				if(target!= null && target.alive)
 				{
+					FlxG.sound.play("assets/sounds/arrow.wav");
 					shoot();
 				}
 				
@@ -189,9 +220,12 @@ class Soldier extends Person {
 			target = MenuState.getNearestTo(new flixel.util.FlxPoint(x,y),0,100);
 			
 			if(target != null)
-			{
-				
+			{	
 				attack(new flixel.util.FlxPoint(target.x,target.y));
+			}
+			else
+			{
+				followLeader();
 			}
 		}
 	}
@@ -229,9 +263,12 @@ class Soldier extends Person {
 
 		emitter.setPosition(x+5, y+height);
 		if(loyalty< 0)
-		turnToFollower();
+		{
+			turnToFollower();
+			loyalty = maxloyalty + 1;
+		}
 		else if(loyalty < maxloyalty && !emitter.on)
-		loyalty += .03;
+		loyalty += .01;
 
 		loyaltyBar.alpha -= .004;
 		loyaltyBar.x = x + barOffset2.x;
@@ -251,6 +288,8 @@ class Soldier extends Person {
 		MenuState.soldiers.remove(this,true);
 		player.followers.add(this);
 		isEnemy = false;
+		color = 0xFF00FF00;
+		
 	}
 	public function followLeader():Void 
 	{
@@ -262,8 +301,8 @@ class Soldier extends Person {
 	public function shoot():Void {
 		var angle:Int = cast angleToPoint(new flixel.util.FlxPoint(target.x,target.y))*180/Math.PI;
 		bow.setBulletDirection(angle,arrowsSpeed);
-		/*if(bow.fire())
-		bow.currentBullet.angle = angle;*/
+		if(bow.fire())
+		bow.currentBullet.angle = angle;
 		//
 	}
 }
