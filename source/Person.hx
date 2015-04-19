@@ -44,11 +44,14 @@ class Person extends FlxSprite {
 	{
 		super.update();
 		manageHealthBar();
-		health += .01;
+		if(health < 100)
+		health += .01 * level;
+		
 	}
 	public function manageHealthBar():Void 
 	{
-		healthBar.alpha -= .01;
+		if(health > 80)
+			healthBar.alpha -= .01;
 		healthBar.x = x + barOffset.x;
 		healthBar.y = y + barOffset.y;
 
@@ -70,8 +73,8 @@ class Person extends FlxSprite {
 
 		if(statusIndex < 1 || statusText.alpha >0)
 		{
-			statusText.scale = new flixel.util.FlxPoint(1 + statusIndex*2 ,1 + statusIndex*2);
-			statusText.y -= 30*statusIndex;
+			statusText.scale = new flixel.util.FlxPoint(1 + statusIndex* 1.2 ,1 + statusIndex*1.2);
+			statusText.y -= 15*statusIndex;
 			statusText.alpha -= .01;
 			statusIndex += 1/60;//1 second
 		}
@@ -98,6 +101,10 @@ class Person extends FlxSprite {
 			statusIndex = 0;
 			statusText.alpha = 1;
 			statusText.text = text;
+			if(isEnemy)
+			statusText.color = flixel.util.FlxColor.RED;
+			else
+			statusText.color = flixel.util.FlxColor.GREEN;
 			return true;
 		}
 		return false;
@@ -107,7 +114,16 @@ class Person extends FlxSprite {
 		healthBar.kill();
 		statusText.kill();
 		rangeSprite.kill();
+		if(health <= 0)
 		FlxG.sound.play("assets/sounds/die.wav");		
+		super.kill();
+	}
+	override public function revive():Void 
+	{
+		healthBar.revive();
+		statusText.revive();
+		rangeSprite.revive();
+		health = 100;	
 		super.kill();
 	}
 }

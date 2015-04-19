@@ -19,10 +19,6 @@ class Player extends Person {
 		animation.add("run", [0,2,0,3], 15, true);
 		animation.add("idle", [0,1], 2, true);
 		animation.callback = animCallback;
-		width = 8;
-		height = 14;
-		offset.x = 4;
-		offset.y = 2;
 		drag.x = drag.y = 1600;
 		followers = new FlxTypedGroup<Soldier>();
 		isEnemy = false;
@@ -35,7 +31,20 @@ class Player extends Person {
 		{
 			persudeOthers();
 		}
-		if(FlxG.keys.justPressed.H )
+		if(FlxG.keys.justPressed.J )
+		{
+			if( command == 0)
+			{
+				if(health<100)
+				health += 1*level;
+
+				for (i in 0 ... followers.length) {
+					if(followers.members[i].health < 100)
+					followers.members[i].health += 1*level;
+				}
+			}
+		}
+		if(FlxG.keys.justPressed.H)
 		{
 			if(command == 0)
 			{
@@ -59,15 +68,18 @@ class Player extends Person {
 	}
 	public function persudeOthers():Void {
 		var person:Person = MenuState.getNearestTo(new flixel.util.FlxPoint(x,y),0,100);
-		if(person != null && statusText.alpha < 0.1 )
+		if(person != null && statusText.alpha < 0.1  )
 		{
 			var soldier:Soldier = cast person;
-			soldier.showParticle(20);
-			signal();
-			FlxFlicker.flicker(soldier,1.0);
-			shout("COME WITH ME !!");
-			FlxG.sound.play("assets/sounds/Powerup.wav");
-			
+			soldier.kill();
+			if(!soldier.emitter.on)
+			{
+				soldier.showParticle(20);
+				signal();
+				FlxFlicker.flicker(soldier,1.0);
+				shout("COME WITH ME !!");
+				FlxG.sound.play("assets/sounds/Powerup.wav");
+			}
 		}
 	}
 	public function controlMovementAndAnimation():Void {

@@ -14,7 +14,7 @@ class Soldier extends Person {
 	private var mode = 0;// 0 -> idle // 1-> run after
 	public var type = 0;//0-> melee // 1-> shooter
 	private var command = 0;//0-> melee // 1-> shooter
-	private var emitter:FlxEmitter;
+	public var emitter:FlxEmitter;
 	private var whitePixel:FlxParticle;
 	public var maxloyalty:Float = 10;
 	public var loyalty:Float = 0;
@@ -25,9 +25,12 @@ class Soldier extends Person {
 	private var arrowsRange:Int = 60;
 	private var arrowsSpeed:Int = 300;
 	private var bow:FlxWeapon;
+	public var initialPoint:FlxPoint;
+	public var zone:Int = 0;
 	public function new(X:Float=0, Y:Float=0 , ?type:Int = 0) 
 	{
 		super(X, Y);
+		initialPoint = new flixel.util.FlxPoint(x,y);
 		loadGraphic("assets/images/soldier2.png", true, 32, 32);
 		setFacingFlip(FlxObject.LEFT, false, false);
 		setFacingFlip(FlxObject.RIGHT, true, false);
@@ -61,8 +64,9 @@ class Soldier extends Person {
 		//	Tell the weapon to create 50 bullets using the bulletPNG image.
 		//	The 5 value is the x offset, which makes the bullet fire from the tip of the players ship.
 		bow = new FlxWeapon("bow",this);
-		bow.makePixelBullet(50);
+		bow.bounds = new flixel.util.FlxRect(0,0,MenuState.tileMap.width,MenuState.tileMap.height );
 		bow.makeImageBullet(10,"assets/images/arrow.png");
+		bow.setFireRate(1);
 		flixel.FlxG.state.add(bow.group);	
 		//	Sets the direction and speed the bullets will be fired in
 		bow.setBulletDirection(FlxWeapon.BULLET_UP, 200);
@@ -72,26 +76,43 @@ class Soldier extends Person {
 		emitter = new FlxEmitter(x+5, y+height, 30);
 		emitter.setSize(20,0);
 		emitter.setXSpeed(0, 0);
-		emitter.setYSpeed( -60,- 80);
+		emitter.setYSpeed( -160,- 180);
 		emitter.setRotation(0,0);
-		emitter.lifespan = .5;
+		emitter.lifespan = .05;
 		emitter.endAlpha = new flixel.effects.particles.FlxTypedEmitter.Bounds(0.0,0.4);
 		flixel.FlxG.state.add(emitter);
 
 		for (i in 0...(Std.int(emitter.maxSize))) 
 		{
 			whitePixel = new FlxParticle();
-			whitePixel.makeGraphic(2, 4, FlxColor.GREEN);
+			whitePixel.makeGraphic(4, 7, 0xFFFFAB00);
 			whitePixel.visible = false; 
 			emitter.add(whitePixel);
 		}
 	}
 	override public function update():Void 
 	{
+		AiBrain();
+		manageBars();
+		if(isEnemy)
+		{
+			flixel.FlxG.collide(player,bow.group,hurtPerson);
+			flixel.FlxG.collide(player.followers,bow.group,hurtPerson);
+		}
+		else
+		{
+			flixel.FlxG.collide(MenuState.soldiers,bow.group,hurtPerson);	
+		}
+		
+		this.immovable = true;
+		super.update();
+	}
+	public function AiBrain():Void 
+	{
 		if(isEnemy)
 		{
 			var tempPerson:Person = MenuState.getNearestFriendTo(new flixel.util.FlxPoint(x,y),0,100);
-			if(tempPerson != null)
+			if(tempPerson != null )
 			{
 				if(tempPerson != target)
 				{
@@ -103,7 +124,9 @@ class Soldier extends Person {
 				
 			}
 			else
-			{ 
+			{
+				mode = 0;
+				blindFollow(initialPoint,true);
 				if(target != null)
 				{
 					if(shout("!!!!"))
@@ -116,12 +139,7 @@ class Soldier extends Person {
 		{
 			follow();
 		}
-		manageBars();
-		flixel.FlxG.collide(player,bow.group,hurtPerson);
-		flixel.FlxG.collide(player.followers,bow.group,hurtPerson);
-		super.update();
 	}
-
 	public function hurtPerson(p:Person,bullet:FlxSprite):Void
 	{
 		bullet.kill();
@@ -133,6 +151,7 @@ class Soldier extends Person {
 		switch (mode) {
 			case 0:
 			animation.play("idle");
+			blindFollow(initialPoint,true);
 			if(distance<100){
 			mode = 1 ;
 			}
@@ -206,8 +225,14 @@ class Soldier extends Person {
 		blindFollow(point,false);
 		var distance:Float = distToPoint(point);
 		if(distance < swordRange){
-			animation.play("melee",false);
-			trace(animation.frameIndex);
+		animation.play("melee",false);
+		}
+	}
+	public function hunt(point:FlxPoint):Void {
+		blindFollow(point,false,arrowsRange);
+		var distance:Float = distToPoint(point);
+		if(distance < arrowsRange){
+		animation.play("shoot",false);
 		}
 	}
 	public function follow():Void {
@@ -221,7 +246,10 @@ class Soldier extends Person {
 			
 			if(target != null)
 			{	
+				if(type ==0)
 				attack(new flixel.util.FlxPoint(target.x,target.y));
+				else
+				hunt(new flixel.util.FlxPoint(target.x,target.y));
 			}
 			else
 			{
@@ -229,9 +257,9 @@ class Soldier extends Person {
 			}
 		}
 	}
-	public function blindFollow(point:FlxPoint,animate:Bool):Void {
+	public function blindFollow(point:FlxPoint,animate:Bool,?arrowsRange=10):Void {
 		var angle :Float = angleToPoint(point);
-		if(distToPoint(point) > 10)
+		if(distToPoint(point) > arrowsRange)
 		{
 			x += speed/60 * Math.cos(angle);
 			y += speed/60 * Math.sin(angle);
@@ -246,13 +274,16 @@ class Soldier extends Person {
 		}
 		else
 			if(animate)
+			{
 				animation.play("idle");
+				mode = 0;
+			}
 	}
 	public function showParticle(amount:Int):Void
 	{
 		if(!emitter.on)
 		{
-			emitter.start(false,.7 ,.08 , amount);
+			emitter.start(false,.7 ,.025 , amount);
 			loyalty -= player.level*3;
 			loyaltyBar.alpha = 1;
 		}
@@ -279,17 +310,33 @@ class Soldier extends Person {
 		loyaltyBar.kill();
 		
 		MenuState.soldiers.remove(this,true);
-
-		
+		if(isEnemy)
+		informHouse(zone);
 		super.kill();
 	}
-
+	override public function revive():Void 
+	{
+		loyaltyBar.revive();
+		loyalty = maxloyalty;
+		MenuState.soldiers.remove(this,true);
+	
+		super.kill();
+	}
 	public function turnToFollower():Void {
 		MenuState.soldiers.remove(this,true);
 		player.followers.add(this);
+		speed = player.speed*.8;
 		isEnemy = false;
+		informHouse(zone);
 		color = 0xFF00FF00;
-		
+	}
+	public function informHouse(i:Int):Void 
+	{
+		switch (i) {
+			case 1: MenuState.house1.count --;
+			case 2: MenuState.house2.count --;
+			case 3: MenuState.house3.count --;
+		}
 	}
 	public function followLeader():Void 
 	{
@@ -301,8 +348,17 @@ class Soldier extends Person {
 	public function shoot():Void {
 		var angle:Int = cast angleToPoint(new flixel.util.FlxPoint(target.x,target.y))*180/Math.PI;
 		bow.setBulletDirection(angle,arrowsSpeed);
-		if(bow.fire())
-		bow.currentBullet.angle = angle;
+		bow.setBulletOffset(width/2,height/2);
+		if(distToPoint(new flixel.util.FlxPoint(target.x+target.width/2,target.y+target.height/2))<30)
+		{
+			shout("enemy is too close");
+		}
+		else if(bow.fire())
+		{
+			bow.currentBullet.angle = angle;
+		}
+		else
+			trace("y");
 		//
 	}
 }

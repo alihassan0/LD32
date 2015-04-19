@@ -56,20 +56,34 @@ class DefaultAssetLibrary extends AssetLibrary {
 		type.set ("assets/images/tile.png", AssetType.IMAGE);
 		path.set ("assets/images/tile.xcf", "assets/images/tile.xcf");
 		type.set ("assets/images/tile.xcf", AssetType.BINARY);
+		path.set ("assets/images/rock.png", "assets/images/rock.png");
+		type.set ("assets/images/rock.png", AssetType.IMAGE);
+		path.set ("assets/images/hous.png", "assets/images/hous.png");
+		type.set ("assets/images/hous.png", AssetType.IMAGE);
 		path.set ("assets/images/soldier.png", "assets/images/soldier.png");
 		type.set ("assets/images/soldier.png", AssetType.IMAGE);
 		path.set ("assets/images/soldier.xcf", "assets/images/soldier.xcf");
 		type.set ("assets/images/soldier.xcf", AssetType.BINARY);
 		path.set ("assets/images/tileset.png", "assets/images/tileset.png");
 		type.set ("assets/images/tileset.png", AssetType.IMAGE);
+		path.set ("assets/images/watergrass.png", "assets/images/watergrass.png");
+		type.set ("assets/images/watergrass.png", AssetType.IMAGE);
+		path.set ("assets/images/house2.png", "assets/images/house2.png");
+		type.set ("assets/images/house2.png", AssetType.IMAGE);
+		path.set ("assets/images/tileset2.png", "assets/images/tileset2.png");
+		type.set ("assets/images/tileset2.png", AssetType.IMAGE);
 		path.set ("assets/images/soldier2.png", "assets/images/soldier2.png");
 		type.set ("assets/images/soldier2.png", AssetType.IMAGE);
 		path.set ("assets/images/arrow.png", "assets/images/arrow.png");
 		type.set ("assets/images/arrow.png", AssetType.IMAGE);
+		path.set ("assets/data/level.tmx", "assets/data/level.tmx");
+		type.set ("assets/data/level.tmx", AssetType.TEXT);
 		path.set ("assets/data/data-goes-here.txt", "assets/data/data-goes-here.txt");
 		type.set ("assets/data/data-goes-here.txt", AssetType.TEXT);
 		path.set ("assets/data/testlevel.tmx", "assets/data/testlevel.tmx");
 		type.set ("assets/data/testlevel.tmx", AssetType.TEXT);
+		path.set ("assets/data/map.csv", "assets/data/map.csv");
+		type.set ("assets/data/map.csv", AssetType.TEXT);
 		path.set ("assets/data/testmap.csv", "assets/data/testmap.csv");
 		type.set ("assets/data/testmap.csv", AssetType.TEXT);
 		path.set ("assets/sounds/Powerup.wav", "assets/sounds/Powerup.wav");
@@ -168,6 +182,12 @@ class DefaultAssetLibrary extends AssetLibrary {
 		id = "assets/images/tile.xcf";
 		path.set (id, id);
 		type.set (id, AssetType.BINARY);
+		id = "assets/images/rock.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
+		id = "assets/images/hous.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
 		id = "assets/images/soldier.png";
 		path.set (id, id);
 		type.set (id, AssetType.IMAGE);
@@ -177,16 +197,31 @@ class DefaultAssetLibrary extends AssetLibrary {
 		id = "assets/images/tileset.png";
 		path.set (id, id);
 		type.set (id, AssetType.IMAGE);
+		id = "assets/images/watergrass.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
+		id = "assets/images/house2.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
+		id = "assets/images/tileset2.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
 		id = "assets/images/soldier2.png";
 		path.set (id, id);
 		type.set (id, AssetType.IMAGE);
 		id = "assets/images/arrow.png";
 		path.set (id, id);
 		type.set (id, AssetType.IMAGE);
+		id = "assets/data/level.tmx";
+		path.set (id, id);
+		type.set (id, AssetType.TEXT);
 		id = "assets/data/data-goes-here.txt";
 		path.set (id, id);
 		type.set (id, AssetType.TEXT);
 		id = "assets/data/testlevel.tmx";
+		path.set (id, id);
+		type.set (id, AssetType.TEXT);
+		id = "assets/data/map.csv";
 		path.set (id, id);
 		type.set (id, AssetType.TEXT);
 		id = "assets/data/testmap.csv";
@@ -364,9 +399,23 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		
 		
+		
+		
+		
+		
+		
+		
+		
 		#if (windows || mac || linux)
 		
 		var useManifest = false;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
 		useManifest = true;
 		useManifest = true;
 		useManifest = true;
@@ -1088,7 +1137,21 @@ class DefaultAssetLibrary extends AssetLibrary {
 
 
 
+
+
+
+
+
+
+
 #elseif html5
+
+
+
+
+
+
+
 
 
 
