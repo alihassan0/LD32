@@ -284,7 +284,7 @@ class Soldier extends Person {
 		if(!emitter.on)
 		{
 			emitter.start(false,.7 ,.025 , amount);
-			loyalty -= player.level*3;
+			loyalty -= player.level*4;
 			loyaltyBar.alpha = 1;
 		}
 	}
@@ -310,6 +310,7 @@ class Soldier extends Person {
 		loyaltyBar.kill();
 		
 		MenuState.soldiers.remove(this,true);
+		player.followers.remove(this);
 		if(isEnemy)
 		informHouse(zone);
 		super.kill();

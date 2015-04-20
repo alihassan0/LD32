@@ -10,6 +10,7 @@ import flixel.effects.FlxFlicker;
 class Player extends Person {
 	public var followers:FlxTypedGroup<Soldier>;
 	public var command:Int = 0;	
+	public var isWinner:Bool = false;	
 	public function new(X:Float=0, Y:Float=0) 
 	{
 		super(X, Y);
@@ -26,38 +27,45 @@ class Player extends Person {
 	override public function update():Void 
 	{
 		super.update();
-
-		if(FlxG.keys.justPressed.G )
+		if(alive)
 		{
-			persudeOthers();
-		}
-		if(FlxG.keys.justPressed.J )
-		{
-			if( command == 0)
+			if(FlxG.keys.justPressed.G )
 			{
-				if(health<100)
-				health += 1*level;
-
-				for (i in 0 ... followers.length) {
-					if(followers.members[i].health < 100)
-					followers.members[i].health += 1*level;
+				persudeOthers();
+			}
+			if(FlxG.keys.justPressed.J )
+			{
+				if( command == 0)
+				{
+					if(health<100)
+					health += 10*level;
+					
+					shout("heal");
+					for (i in 0 ... followers.length) {
+						if(followers.members[i] != null && followers.members[i].alive && followers.members[i].health < 100)
+						{
+							followers.members[i].health += 10*level;
+							followers.members[i].healthBar.alpha = 1;
+						}
+					}
 				}
 			}
-		}
-		if(FlxG.keys.justPressed.H)
-		{
-			if(command == 0)
+			if(FlxG.keys.justPressed.H)
 			{
-				command = 1;
-				shout("Attack !!!");
+				if(command == 0)
+				{
+					command = 1;
+					shout("Attack !!!");
+				}
+				else
+				{
+					command = 0;
+					shout("Follow Me !!!");
+				}
 			}
-			else
-			{
-				command = 0;
-				shout("Follow Me !!!");
-			}
+			controlMovementAndAnimation();		
 		}
-		controlMovementAndAnimation();	
+		
 	}
 	public function animCallback(s:String, f:Int, i:Int):Void
 	{
@@ -71,7 +79,7 @@ class Player extends Person {
 		if(person != null && statusText.alpha < 0.1  )
 		{
 			var soldier:Soldier = cast person;
-			soldier.kill();
+			//soldier.kill();
 			if(!soldier.emitter.on)
 			{
 				soldier.showParticle(20);
@@ -82,25 +90,29 @@ class Player extends Person {
 			}
 		}
 	}
+	override public function kill():Void 
+	{	
+		flixel.FlxG.switchState(new GameOverState());
+		super.kill();
+	}
 	public function controlMovementAndAnimation():Void {
-		if(flixel.FlxG.keys.pressed.RIGHT){
+		if(flixel.FlxG.keys.pressed.RIGHT && x < MenuState.tileMap.get_width()-width-16){
 			facing = FlxObject.LEFT;
 			this.velocity.x = speed;
 			animation.play("run");
 		}
-
-		if (flixel.FlxG.keys.pressed.LEFT) {
+		if (flixel.FlxG.keys.pressed.LEFT && x > 16) {
 			facing = FlxObject.RIGHT;
 			this.velocity.x = -speed;
 			animation.play("run");
 		}
 
-		if(flixel.FlxG.keys.pressed.UP){
+		if(flixel.FlxG.keys.pressed.UP && y >16){
 			this.velocity.y = -speed;
 			animation.play("run");
 		}
 
-		if (flixel.FlxG.keys.pressed.DOWN) {
+		if (flixel.FlxG.keys.pressed.DOWN && y < MenuState.tileMap.get_height()-height-16) {
 			this.velocity.y = speed;
 			animation.play("run");
 		}

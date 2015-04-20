@@ -48,6 +48,7 @@ private var timer:FlxTimer;
 	{
 		alpha = 0;
 		timer.destroy();
+		MenuState.player.level ++;
 		if(hzone == 1)
 		{
 			MenuState.zoneUnlocked2 = true;
@@ -63,7 +64,19 @@ private var timer:FlxTimer;
 		if(hzone == 3)
 		{
 			MenuState.zoneUnlocked3 = false;
-			flixel.FlxG.switchState(new MenuState());
+			MenuState.player.isWinner = true;
+			flixel.FlxG.switchState(new GameOverState());
 		}
+	}
+	override public function showParticle(amount:Int):Void
+	{
+
+	}
+	override public function hurt(Damage:Float):Void 
+	{
+		Damage /= (4*hzone);
+		healthBar.kill();
+		healthBar.alpha = 1;
+		super.hurt(Damage);
 	}
 }

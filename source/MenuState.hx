@@ -15,6 +15,7 @@ class MenuState extends FlxState
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
+
 	public static var tileMap:FlxTilemap;
 	private var collidabletileMap:FlxTilemap;
 	public static var player:Player;
@@ -40,7 +41,7 @@ class MenuState extends FlxState
 	public static var zoneUnlocked1:Bool = true;
 	public static var zoneUnlocked2:Bool = false;
 	public static var zoneUnlocked3:Bool = false;
-	
+
 	override public function create():Void
 	{
 		super.create();
