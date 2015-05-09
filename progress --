@@ -1,0 +1,40 @@
+progress --
+7:00  started working 
+8:00  start with importinh charachter
+9:00  got a working top down charachter who was very good looking ... but fount it needed a lot of art work
+10:00 created the main charachter from scratch ... and finished basic idle and run animation
+11:00 create the main soldier sprite having sprites for melee(sword) and shooter(arrows)
+12:00 adding more structure and making the run,idle,melee,shoot animation of the soldier
+13:00 added a test tile map and al duhr prayer
+14:00 adding basic AI for handling soldiers animation and added health bar to all charahcters
+15:00 adding basic camera .. and flxbounds ..  spawn enemies in random location .. stop player from leaving arena 
+16:00 having launch .. game design .. al asr prayer
+16:30 break 
+17:00 add aqquistion particle effect
+18:00 add ability to aquire followers
+19:00 break and sunset prayer
+20:00 make enemy follow you in rings and more inhancment to aacquisition process 
+21:00 -- i had to go out for an ergent call
+22:00 enemies now can attack each other if they are not in the same team
+23:00 archer movement 
+24:00 fixel AI bugs
+//****************************************************************************************************************************************
+7:00  replace Color
+8:00  status text -- signal() , shout();
+9:00  test AI on large numbers 
+10:00 choosing sound effects
+11:00 adding sound effects and fixing bugs
+12:00 AI ... AI .. AI
+01:00 make better map
+//------------------------------------------------------------------
+bugs 
+ 
+getnerest to the center of the sprite
+
+don't allow player or enemies to go offscreen
+bows not shooting
+
+loyality bar not appearing
+
+followers arrow man not shootinh
+music
